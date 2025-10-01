@@ -1,0 +1,38 @@
+[package]
+name = "procedural_tilemaps_core"
+version = "0.1.0"
+description = "Lightweight 2D tilemap generation with Wave Function Collapse / Model Synthesis for Bevy"
+repository = "https://github.com/jamesfebin/bevy_procedural_tilemaps"
+documentation = ""
+edition = "2021"
+license = "MIT OR Apache-2.0"
+keywords = ["gamedev", "procedural-gen", "wfc", "model-synthesis", "algorithm"]
+categories = ["game-development", "algorithms"]
+readme = "../README.md"
+
+[features]
+default = []
+# Stores an optional name for each model
+models-names = []
+
+# Enables some debug traces (via tracing)
+debug-traces = ["models-names"]
+
+# Enables some Bevy trait derives
+bevy = ["dep:bevy"]
+# Enables more Bevy trait derives for reflection
+reflect = ["bevy"]
+
+[dependencies]
+# External dependencies
+bitvec = "1.0.1"
+crossbeam-channel = "0.5.8"
+ndarray = "0.15.6"
+rand = "0.8.5"
+thiserror = "1.0.50"
+tracing = "0.1.40"
+
+# Optional dependencies
+
+# Only enabled when the "bevy" feature is enabled
+bevy = { version = "0.17.0", optional = true, default-features = false }

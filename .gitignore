@@ -1,0 +1,11 @@
+# Cargo/Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# macOS
+.DS_Store
+.cursorindexingignore
+
+# Specstory
+.specstory
