@@ -48,7 +48,7 @@ It stacks multiple Z layers to render a top-down map while using Bevy’s 2D cam
 
 ```
 [dependencies]
-bevy_procedural_tilemaps = { version = "0.1", default-features = false, features = [
+bevy_procedural_tilemaps = { version = "0.1.1", default-features = false, features = [
     "simple-plugin",
     "default-bundle-inserters"
 ] }
