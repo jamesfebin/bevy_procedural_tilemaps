@@ -7,10 +7,7 @@ exclude = ["assets/"]
 
 [dependencies]
 # ----- Internal dependencies
-bevy_procedural_tilemaps = { path = "../bevy_procedural_tilemaps", default-features = false, features = [
-	"simple-plugin",
-	"default-bundle-inserters",
-] }
+bevy_procedural_tilemaps = { path = "../bevy_procedural_tilemaps" }
 
 # ----- External dependencies
 bevy = { version = "0.17.0", default-features = false, features = [

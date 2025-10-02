@@ -26,7 +26,7 @@ fn main() {
 
 ## Features
 
-- `simple-plugin` – minimal "run the generator and spawn tiles" plugin.
-- `default-bundle-inserters` – provides default `BundleInserter` implementations for common asset handles.
+- `simple-plugin` – minimal "run the generator and spawn tiles" plugin. Enabled by default; disable via `default-features = false` if you want to register systems manually.
+- `default-bundle-inserters` – provides default `BundleInserter` implementations for common asset handles. Enabled by default alongside `simple-plugin` to match the tile layers example.
 
 For more details see the top-level README.

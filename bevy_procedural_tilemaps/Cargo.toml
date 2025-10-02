@@ -1,6 +1,6 @@
 [package]
 name = "bevy_procedural_tilemaps"
-version = "0.1.1"
+version = "0.1.2"
 description = "Lightweight 2D tilemap generation with Wave Function Collapse / Model Synthesis for Bevy"
 repository = "https://github.com/jamesfebin/bevy_procedural_tilemaps"
 documentation = "https://docs.rs/bevy_procedural_tilemaps"
@@ -10,7 +10,10 @@ keywords = ["gamedev", "procedural-gen", "wfc", "algorithm", "bevy"]
 categories = ["game-development", "algorithms"]
 
 [features]
-default = []
+default = [
+    "simple-plugin",
+    "default-bundle-inserters",
+]
 # Runs the generation and spawns assets when complete
 simple-plugin = []
 # Provides default bundle inserters for common asset handles
@@ -22,7 +25,7 @@ default-bundle-inserters = [
 
 [dependencies]
 # ----- Internal dependencies
-procedural_tilemaps_core = { version = "0.1.1", features = [
+procedural_tilemaps_core = { version = "0.1.2", features = [
     "bevy",
 ] }
 
