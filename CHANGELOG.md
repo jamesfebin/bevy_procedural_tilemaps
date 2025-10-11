@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.3
+- Added a `BundleInserter` implementation for `Sprite`, so preconfigured sprites (for example from an atlas) can be spawned when using the `default-bundle-inserters` feature.
+
 ## 0.1.2
 - Enabled the `simple-plugin` and `default-bundle-inserters` features by default in `bevy_procedural_tilemaps`, simplifying the tile layers example dependency stanza.
 - Updated documentation and example manifests to rely on the new default feature set.

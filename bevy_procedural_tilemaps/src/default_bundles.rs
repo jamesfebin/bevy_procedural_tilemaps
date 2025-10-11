@@ -32,3 +32,25 @@ impl BundleInserter for Handle<Image> {
         ));
     }
 }
+
+/// **WARNING**: Assumes a rotation axis aligned with +Z (convenient for 2D sprites).
+///
+/// Use this when you already have a configured [`Sprite`] (for example via
+/// [`Sprite::from_atlas_image`]) and want to reuse it for spawned models.
+impl BundleInserter for Sprite {
+    fn insert_bundle(
+        &self,
+        commands: &mut EntityCommands,
+        translation: Vec3,
+        scale: Vec3,
+        rotation: ModelRotation,
+    ) {
+        commands.insert((
+            Transform::from_translation(translation)
+                .with_scale(scale)
+                .with_rotation(Quat::from_rotation_z(rotation.rad())),
+            self.clone(),
+            Anchor::CENTER,
+        ));
+    }
+}
