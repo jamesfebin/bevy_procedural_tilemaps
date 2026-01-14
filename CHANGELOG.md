@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0
+- **BREAKING**: Updated to Bevy 0.18 (from 0.17)
+- Updated all dependencies to be compatible with Bevy 0.18
+
 ## 0.1.3
 - Added a `BundleInserter` implementation for `Sprite`, so preconfigured sprites (for example from an atlas) can be spawned when using the `default-bundle-inserters` feature.
 

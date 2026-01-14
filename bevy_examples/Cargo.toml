@@ -10,7 +10,7 @@ exclude = ["assets/"]
 bevy_procedural_tilemaps = { path = "../bevy_procedural_tilemaps" }
 
 # ----- External dependencies
-bevy = { version = "0.17.0", default-features = false, features = [
+bevy = { version = "0.18", default-features = false, features = [
 	"multi_threaded",
 	"bevy_asset",
 	"bevy_core_pipeline",
