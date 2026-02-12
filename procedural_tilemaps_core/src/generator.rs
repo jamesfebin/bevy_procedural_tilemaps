@@ -1,5 +1,5 @@
 use core::fmt;
-use std::{collections::HashMap, sync::Arc};
+use std::{collections::HashMap, collections::HashSet, sync::Arc};
 
 #[cfg(feature = "bevy")]
 use bevy::ecs::component::Component;
@@ -121,6 +121,7 @@ impl<C: CoordinateSystem, G: Grid<C>> Generator<C, G> {
         model_selection_heuristic: ModelSelectionHeuristic,
         rng_mode: RngMode,
         observers: Vec<crossbeam_channel::Sender<GenerationUpdate>>,
+        border_zones: HashSet<(usize, usize)>,
         collector: &mut Collector,
     ) -> Result<Self, NodeSetError> {
         let mut generator = Self {
@@ -133,6 +134,7 @@ impl<C: CoordinateSystem, G: Grid<C>> Generator<C, G> {
                 model_selection_heuristic,
                 rng_mode,
                 observers,
+                border_zones,
             ),
         };
         match generator

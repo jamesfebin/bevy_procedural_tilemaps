@@ -1,9 +1,9 @@
 # bevy_procedural_tilemaps
 
-`bevy_procedural_tilemaps` is the Bevy integration layer for the lean tile-oriented fork of [Guillaume Henaux’s `ghx_proc_gen`](https://github.com/Henauxg/ghx_proc_gen). It is maintained by [AIBodh](https://aibodh.com/) for use in the upcoming Bevy game-development book.
+`bevy_procedural_tilemaps` is the Bevy integration layer for the lean tile-oriented fork of [Gilles Henaux’s `ghx_proc_gen`](https://github.com/Henauxg/ghx_proc_gen). It is maintained by [AIBodh](https://aibodh.com/) for use in the upcoming Bevy game-development book.
 
-- Updated for Bevy **0.17**.
-- Original project design & implementation: **Guillaume Henaux (Henauxg)** and contributors.
+- Updated for Bevy **0.18**.
+- Original project design & implementation: **Gilles Henaux** and contributors.
 - Dual-licensed under MIT/Apache like the upstream project.
 
 ## Quickstart

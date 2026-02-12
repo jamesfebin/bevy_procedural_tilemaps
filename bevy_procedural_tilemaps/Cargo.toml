@@ -1,6 +1,6 @@
 [package]
 name = "bevy_procedural_tilemaps"
-version = "0.2.0"
+version = "0.3.0"
 description = "Lightweight 2D tilemap generation with Wave Function Collapse / Model Synthesis for Bevy"
 repository = "https://github.com/jamesfebin/bevy_procedural_tilemaps"
 documentation = "https://docs.rs/bevy_procedural_tilemaps"
@@ -25,7 +25,7 @@ default-bundle-inserters = [
 
 [dependencies]
 # ----- Internal dependencies
-procedural_tilemaps_core = { version = "0.2.0", features = [
+procedural_tilemaps_core = { version = "0.3.0", features = [
     "bevy",
 ] }
 

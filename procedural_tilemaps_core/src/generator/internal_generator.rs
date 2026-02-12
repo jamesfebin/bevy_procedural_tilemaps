@@ -1,8 +1,9 @@
+use std::collections::HashSet;
 use std::sync::Arc;
 
 use crate::grid::{
     coordinate_system::CoordinateSystem,
-    direction::DirectionTrait,
+    direction::{DirectionIndex, DirectionTrait},
     grid::{Grid, GridData, NodeRef},
 };
 use bitvec::{bitvec, order::LocalBits, slice::IterOnes, vec::BitVec};
@@ -67,6 +68,16 @@ pub(crate) struct InternalGenerator<C: CoordinateSystem, G: Grid<C>> {
     propagation_stack: Vec<PropagationEntry>,
     /// The value at `support_count[node_index][model_index][direction]` represents the number of supports of a `model_index` at `node_index` from `direction`
     supports_count: Array<usize, Ix3>,
+
+    // === Multi-chunk support ===
+    /// Set of `(node_index, direction_index)` pairs that should skip support-count validation
+    /// during pregen. Used for multi-chunk generation where border tiles are pre-seeded from
+    /// already-generated neighbors.
+    border_zones: HashSet<(usize, DirectionIndex)>,
+    /// Whether border zone exemptions are currently active. Enabled during pregen (to protect
+    /// pre-seeded nodes from cascading bans), disabled during the generation phase (to ensure
+    /// full constraint checking and avoid masking real violations).
+    border_zones_active: bool,
 }
 
 impl<C: CoordinateSystem, G: Grid<C>> InternalGenerator<C, G> {
@@ -77,6 +88,7 @@ impl<C: CoordinateSystem, G: Grid<C>> InternalGenerator<C, G> {
         model_selection_heuristic: ModelSelectionHeuristic,
         rng_mode: RngMode,
         observers: Vec<crossbeam_channel::Sender<GenerationUpdate>>,
+        border_zones: HashSet<(usize, DirectionIndex)>,
     ) -> Self {
         let models_count = rules.models_count();
         let nodes_count = grid.total_size();
@@ -112,6 +124,9 @@ impl<C: CoordinateSystem, G: Grid<C>> InternalGenerator<C, G> {
 
             propagation_stack: Vec::new(),
             supports_count: Array::zeros((nodes_count, models_count, direction_count)),
+
+            border_zones,
+            border_zones_active: true,
         }
     }
 }
@@ -218,8 +233,17 @@ impl<C: CoordinateSystem, G: Grid<C>> InternalGenerator<C, G> {
                         Some(_) => {
                             let allowed_models_count =
                                 self.rules.allowed_models(model, opposite_dir).len();
-                            self.supports_count[(node, model, (*direction).into())] =
+                            let dir_index: usize = (*direction).into();
+                            self.supports_count[(node, model, dir_index)] =
                                 allowed_models_count;
+                            // Skip ban check for border zones during pregen: these nodes have
+                            // pre-seeded neighbors from other chunks, so zero support from
+                            // that direction does not indicate an actual constraint violation.
+                            if self.border_zones_active
+                                && self.border_zones.contains(&(node, dir_index))
+                            {
+                                continue;
+                            }
                             if allowed_models_count == 0 && self.is_model_possible(node, model) {
                                 // Ban model for node since it would 100% lead to a contradiction at some point during the generation.
                                 if let Err(err) = self.ban_model_from_node(node, model, collector) {
@@ -337,6 +361,8 @@ impl<C: CoordinateSystem, G: Grid<C>> InternalGenerator<C, G> {
             match self.status {
                 InternalGeneratorStatus::Ongoing => (),
                 InternalGeneratorStatus::Done | InternalGeneratorStatus::Failed(_) => {
+                    // Enable border zones for pregen during reinitialize
+                    self.border_zones_active = true;
                     match self.reinitialize(&mut None, initial_nodes) {
                         GenerationStatus::Ongoing => (),
                         GenerationStatus::Done => {
@@ -347,6 +373,8 @@ impl<C: CoordinateSystem, G: Grid<C>> InternalGenerator<C, G> {
                     }
                 }
             }
+            // Disable border zones for the generation phase to detect real violations
+            self.border_zones_active = false;
             match self.generate_remaining_nodes(&mut None) {
                 Ok(_) => {
                     return Ok(GenInfo {
@@ -652,7 +680,12 @@ impl<C: CoordinateSystem, G: Grid<C>> InternalGenerator<C, G> {
                             *supports_count -= 1;
                             // When we find a model which is now unsupported, we queue a ban
                             // We check > 0  and for == because we only want to queue the event once.
-                            if *supports_count == 0 {
+                            // During pregen, skip ban for border zones: the neighbor in this
+                            // direction is a pre-seeded tile from another chunk.
+                            if *supports_count == 0
+                                && !(self.border_zones_active
+                                    && self.border_zones.contains(&(*neighbour_index, dir)))
+                            {
                                 self.ban_model_from_node(*neighbour_index, model, collector)?;
                             }
                         }

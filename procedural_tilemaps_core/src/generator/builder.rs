@@ -1,7 +1,8 @@
-use std::{marker::PhantomData, sync::Arc};
+use std::{collections::HashSet, marker::PhantomData, sync::Arc};
 
 use crate::grid::{
     coordinate_system::CoordinateSystem,
+    direction::DirectionIndex,
     grid::{Grid, GridData, NodeRef},
 };
 
@@ -61,6 +62,7 @@ pub struct GeneratorBuilder<G, R, C: CoordinateSystem, T: Grid<C>> {
     rng_mode: RngMode,
     observers: Vec<crossbeam_channel::Sender<GenerationUpdate>>,
     initial_nodes: Vec<(NodeIndex, ModelVariantIndex)>,
+    border_zones: HashSet<(NodeIndex, DirectionIndex)>,
     typestate: PhantomData<(G, R)>,
 }
 
@@ -76,6 +78,7 @@ impl<C: CoordinateSystem, G: Grid<C>> GeneratorBuilder<Unset, Unset, C, G> {
             rng_mode: RngMode::RandomSeed,
             observers: Vec::new(),
             initial_nodes: Vec::new(),
+            border_zones: HashSet::new(),
             typestate: PhantomData,
         }
     }
@@ -94,6 +97,7 @@ impl<C: CoordinateSystem, G: Grid<C>> GeneratorBuilder<Unset, Unset, C, G> {
             rng_mode: self.rng_mode,
             observers: self.observers,
             initial_nodes: self.initial_nodes,
+            border_zones: self.border_zones,
 
             typestate: PhantomData,
         }
@@ -111,6 +115,7 @@ impl<C: CoordinateSystem, G: Grid<C>> GeneratorBuilder<Unset, Unset, C, G> {
             rng_mode: self.rng_mode,
             observers: self.observers,
             initial_nodes: self.initial_nodes,
+            border_zones: self.border_zones,
 
             typestate: PhantomData,
         }
@@ -130,6 +135,7 @@ impl<C: CoordinateSystem, G: Grid<C>> GeneratorBuilder<Unset, Set, C, G> {
             rng_mode: self.rng_mode,
             observers: self.observers,
             initial_nodes: self.initial_nodes,
+            border_zones: self.border_zones,
 
             typestate: PhantomData,
         }
@@ -155,6 +161,23 @@ impl<G, R, C: CoordinateSystem, T: Grid<C>> GeneratorBuilder<G, R, C, T> {
     /// Specifies the [`RngMode`] to be used by the [`Generator`]. Defaults to [`RngMode::RandomSeed`].
     pub fn with_rng(mut self, rng_mode: RngMode) -> Self {
         self.rng_mode = rng_mode;
+        self
+    }
+
+    /// Specifies `(node_index, direction_index)` pairs that should skip constraint validation
+    /// during support-count initialization.
+    ///
+    /// This is useful for **multi-chunk generation** where border tiles are pre-seeded from
+    /// already-generated neighboring chunks. Without this, a pre-seeded border tile may be
+    /// banned during initialization because it has zero support from the direction of its
+    /// pre-seeded neighbor (the neighbor's tile is fixed but not visible to the constraint
+    /// solver). Marking those `(node, direction)` pairs as border zones tells the solver to
+    /// skip the ban check for those specific directions.
+    ///
+    /// Calling this method is optional; when not called, the builder defaults to an empty
+    /// set and the generator behaves identically to previous versions.
+    pub fn with_border_zones(mut self, zones: Vec<(NodeIndex, DirectionIndex)>) -> Self {
+        self.border_zones.extend(zones);
         self
     }
 
@@ -293,6 +316,7 @@ impl<C: CoordinateSystem, G: Grid<C>> GeneratorBuilder<Set, Set, C, G> {
             self.model_selection_heuristic,
             self.rng_mode,
             self.observers,
+            self.border_zones,
             collector,
         )?)
     }
