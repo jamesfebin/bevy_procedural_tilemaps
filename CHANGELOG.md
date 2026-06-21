@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0-rc.1
+- **BREAKING**: Updated to Bevy 0.19 (from 0.18).
+- Updated all crate dependencies to be compatible with Bevy 0.19. No public API changes were required.
+
 ## 0.3.0
 - Added `GeneratorBuilder::with_border_zones()` for multi-chunk generation support. Allows specifying `(node_index, direction_index)` pairs that skip constraint validation during pregen, enabling pre-seeded border tiles from neighboring chunks.
 - Border zone exemptions are automatically disabled during the generation phase (only active during pregen) to ensure full constraint checking and prevent masking real violations.

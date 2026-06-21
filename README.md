@@ -3,7 +3,7 @@
 This repository is a streamlined fork of [Gilles Henaux’s `ghx_proc_gen`](https://github.com/Henauxg/ghx_proc_gen), trimmed to focus on lightweight **2D tilemap generation** with Wave Function Collapse / Model Synthesis for Bevy. The work powers the procedural-generation chapters of my upcoming Bevy game-development book—The Impatient Programmer's Guide to Bevy and Rust (Chapter 1 is already available [here](https://aibodh.com/posts/bevy-rust-game-development-chapter-1/)).
 
 Highlights:
-- Updated for Bevy **0.18**.
+- Updated for Bevy **0.19**.
 - Small API surface: cartesian grid helpers, rule/model builders, and a simple Bevy runner.
 - Designed for layered 2D tile maps (Z layers handled by a 3D grid).
 - MIT/Apache dual-licensed, preserving full credit to the original authors.
@@ -48,7 +48,7 @@ It stacks multiple Z layers to render a top-down map while using Bevy’s 2D cam
 
 ```
 [dependencies]
-bevy_procedural_tilemaps = "0.1.3"
+bevy_procedural_tilemaps = "0.4.0-rc.1"
 ```
 
 - `simple-plugin` – registers the minimal generator runner used by the example. Enabled by default; opt out with `default-features = false` if you want to wire systems manually.
