@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.0-rc.1
+## 0.4.0
 - **BREAKING**: Updated to Bevy 0.19 (from 0.18).
 - Updated all crate dependencies to be compatible with Bevy 0.19. No public API changes were required.
 
