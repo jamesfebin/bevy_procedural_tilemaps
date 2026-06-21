@@ -48,7 +48,7 @@ It stacks multiple Z layers to render a top-down map while using Bevy’s 2D cam
 
 ```
 [dependencies]
-bevy_procedural_tilemaps = "0.4.0-rc.1"
+bevy_procedural_tilemaps = "0.4.0"
 ```
 
 - `simple-plugin` – registers the minimal generator runner used by the example. Enabled by default; opt out with `default-features = false` if you want to wire systems manually.
