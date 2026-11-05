@@ -1,5 +1,13 @@
 # Changelog
 
+## bevy_procedural_tilemaps 0.5.1
+- Use the shared README for the published integration package, replacing the stale package-local Bevy 0.18 README with the Bevy 0.20 and Rust 1.97.1 requirements.
+- Document Bevy compatibility, dependency setup, the complete example, and feature flags. No Rust code or public API changes; the core crate remains at 0.5.0.
+
+## 0.5.0
+- **BREAKING**: Updated to Bevy 0.20 (from 0.19), requiring Rust 1.97.1.
+- Updated the integration, optional Bevy support in the core, and the tile-layers example together. No public tilemap API changes were required.
+
 ## 0.4.0
 - **BREAKING**: Updated to Bevy 0.19 (from 0.18).
 - Updated all crate dependencies to be compatible with Bevy 0.19. No public API changes were required.

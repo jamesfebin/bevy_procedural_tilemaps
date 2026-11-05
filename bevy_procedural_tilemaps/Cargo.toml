@@ -1,11 +1,13 @@
 [package]
 name = "bevy_procedural_tilemaps"
-version = "0.4.0"
+version = "0.5.1"
 description = "Lightweight 2D tilemap generation with Wave Function Collapse / Model Synthesis for Bevy"
 repository = "https://github.com/jamesfebin/bevy_procedural_tilemaps"
 documentation = "https://docs.rs/bevy_procedural_tilemaps"
 edition = "2021"
+rust-version = "1.97.1"
 license = "MIT OR Apache-2.0"
+readme = "../README.md"
 keywords = ["gamedev", "procedural-gen", "wfc", "algorithm", "bevy"]
 categories = ["game-development", "algorithms"]
 
@@ -25,12 +27,12 @@ default-bundle-inserters = [
 
 [dependencies]
 # ----- Internal dependencies
-procedural_tilemaps_core = { version = "0.4.0", features = [
+procedural_tilemaps_core = { version = "0.5.0", features = [
     "bevy",
 ] }
 
 # ----- External dependencies
-bevy = { version = "0.19", default-features = false, features = [
+bevy = { version = "0.20", default-features = false, features = [
     "bevy_asset",
     "bevy_render",
     "bevy_camera",
